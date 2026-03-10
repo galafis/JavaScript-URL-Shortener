@@ -1,121 +1,95 @@
-# 🚀 Javascript Url Shortener
+# JavaScript URL Shortener
 
-> Professional JavaScript-URL-Shortener - Created by Gabriel Demetrios Lafis
+REST API service for creating and resolving shortened URLs with click analytics, custom codes, expiration support, and pagination.
 
-[![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-F7DF1E.svg)](https://img.shields.io/badge/)
-[![Express.js](https://img.shields.io/badge/Express.js-4-000000.svg)](https://img.shields.io/badge/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
-[English](#english) | [Português](#português)
+[English](#english) | [Portugues](#portugues)
 
 ---
 
 ## English
 
-### 🎯 Overview
+### Overview
 
-**Javascript Url Shortener** is a production-grade JavaScript application that showcases modern software engineering practices including clean architecture, comprehensive testing, containerized deployment, and CI/CD readiness.
+A Node.js/Express URL shortening service that converts long URLs into short, shareable links. Features include custom short codes, configurable expiration, click tracking with analytics, duplicate detection, and a paginated listing endpoint.
 
-The codebase comprises **21 lines** of source code organized across **1 modules**, following industry best practices for maintainability, scalability, and code quality.
-
-### ✨ Key Features
-
-- **📐 Clean Architecture**: Modular design with clear separation of concerns
-- **🧪 Test Coverage**: Unit and integration tests for reliability
-- **📚 Documentation**: Comprehensive inline documentation and examples
-- **🔧 Configuration**: Environment-based configuration management
-
-### 🏗️ Architecture
+### Architecture
 
 ```mermaid
 graph TB
-    subgraph Client["🖥️ Client Layer"]
-        A[Web Client]
-        B[API Documentation]
+    subgraph API Layer
+        A[POST /api/shorten] --> D[URL Validator]
+        B[GET /:code] --> E[Redirect Handler]
+        C[GET /api/urls/:code/analytics] --> F[Analytics Engine]
     end
-    
-    subgraph API["⚡ API Layer"]
-        C[Middleware Pipeline]
-        D[Route Handlers]
-        E[Business Logic]
+
+    subgraph Business Logic
+        D --> G[Code Generator]
+        D --> H[Duplicate Checker]
+        E --> I[Expiration Checker]
+        E --> J[Click Recorder]
     end
-    
-    subgraph Data["💾 Data Layer"]
-        F[(Primary Database)]
-        G[Cache]
+
+    subgraph Storage
+        K[URL Store - Map]
+        L[Analytics Store - Map]
     end
-    
-    A --> C
-    B --> C
-    C --> D --> E
-    E --> F
-    E --> G
-    
-    style Client fill:#e1f5fe
-    style API fill:#f3e5f5
-    style Data fill:#fff3e0
+
+    G --> K
+    H --> K
+    I --> K
+    J --> L
+    F --> L
+
+    style API Layer fill:#e1f5fe
+    style Business Logic fill:#e8f5e9
+    style Storage fill:#fff3e0
 ```
 
-### 🚀 Quick Start
+### Features
 
-#### Prerequisites
+- URL shortening with SHA-256 based code generation
+- Custom short codes with validation
+- Configurable URL expiration (TTL in seconds)
+- Duplicate URL detection and reuse
+- Click analytics with user agent, referer, and timestamp
+- 301 redirect for short URL resolution
+- Paginated URL listing endpoint
+- URL deletion support
+- Health check endpoint
 
-- Node.js 20+
-- npm or yarn
+### API Endpoints
 
-#### Installation
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/shorten | Create a short URL |
+| GET | /:code | Redirect to original URL |
+| GET | /api/urls | List all URLs (paginated) |
+| GET | /api/urls/:code | Get URL details |
+| GET | /api/urls/:code/analytics | Get click analytics |
+| DELETE | /api/urls/:code | Delete a short URL |
+| GET | /api/health | Health check |
+
+### Quick Start
 
 ```bash
-# Clone the repository
 git clone https://github.com/galafis/JavaScript-URL-Shortener.git
 cd JavaScript-URL-Shortener
-
-# Install dependencies
 npm install
-```
-
-#### Running
-
-```bash
-# Development mode
-npm run dev
-
-# Production build
-npm run build
 npm start
 ```
 
-### 📁 Project Structure
+### Tech Stack
 
-```
-JavaScript-URL-Shortener/
-├── LICENSE
-├── README.md
-├── index.js
-└── package.json
-```
+| Technology | Purpose |
+|------------|---------|
+| Node.js | Runtime environment |
+| Express.js | HTTP server framework |
 
-### 🛠️ Tech Stack
+### License
 
-| Technology | Description | Role |
-|------------|-------------|------|
-| **JavaScript** | Core Language | Primary |
+MIT License - see [LICENSE](LICENSE) for details.
 
-### 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-### 👤 Author
+### Author
 
 **Gabriel Demetrios Lafis**
 - GitHub: [@galafis](https://github.com/galafis)
@@ -123,106 +97,71 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## Português
+## Portugues
 
-### 🎯 Visão Geral
+### Visao Geral
 
-**Javascript Url Shortener** é uma aplicação JavaScript de nível profissional que demonstra práticas modernas de engenharia de software, incluindo arquitetura limpa, testes abrangentes, implantação containerizada e prontidão para CI/CD.
+Servico de encurtamento de URLs em Node.js/Express que converte URLs longas em links curtos e compartilhaveis. Inclui codigos curtos personalizados, expiracao configuravel, rastreamento de cliques com analytics, deteccao de duplicatas e endpoint de listagem paginada.
 
-A base de código compreende **21 linhas** de código-fonte organizadas em **1 módulos**, seguindo as melhores práticas do setor para manutenibilidade, escalabilidade e qualidade de código.
-
-### ✨ Funcionalidades Principais
-
-- **📐 Clean Architecture**: Modular design with clear separation of concerns
-- **🧪 Test Coverage**: Unit and integration tests for reliability
-- **📚 Documentation**: Comprehensive inline documentation and examples
-- **🔧 Configuration**: Environment-based configuration management
-
-### 🏗️ Arquitetura
+### Arquitetura
 
 ```mermaid
 graph TB
-    subgraph Client["🖥️ Client Layer"]
-        A[Web Client]
-        B[API Documentation]
+    subgraph Camada API
+        A[POST /api/shorten] --> D[Validador de URL]
+        B[GET /:code] --> E[Handler de Redirecionamento]
+        C[GET /api/urls/:code/analytics] --> F[Motor de Analytics]
     end
-    
-    subgraph API["⚡ API Layer"]
-        C[Middleware Pipeline]
-        D[Route Handlers]
-        E[Business Logic]
+
+    subgraph Logica de Negocio
+        D --> G[Gerador de Codigo]
+        D --> H[Verificador de Duplicatas]
+        E --> I[Verificador de Expiracao]
+        E --> J[Registrador de Cliques]
     end
-    
-    subgraph Data["💾 Data Layer"]
-        F[(Primary Database)]
-        G[Cache]
+
+    subgraph Armazenamento
+        K[URL Store]
+        L[Analytics Store]
     end
-    
-    A --> C
-    B --> C
-    C --> D --> E
-    E --> F
-    E --> G
-    
-    style Client fill:#e1f5fe
-    style API fill:#f3e5f5
-    style Data fill:#fff3e0
+
+    G --> K
+    H --> K
+    I --> K
+    J --> L
+    F --> L
+
+    style Camada API fill:#e1f5fe
+    style Logica de Negocio fill:#e8f5e9
+    style Armazenamento fill:#fff3e0
 ```
 
-### 🚀 Início Rápido
+### Funcionalidades
 
-#### Prerequisites
+- Encurtamento de URLs com geracao de codigo baseada em SHA-256
+- Codigos curtos personalizados com validacao
+- Expiracao configuravel de URLs (TTL em segundos)
+- Deteccao e reutilizacao de URLs duplicadas
+- Analytics de cliques com user agent, referer e timestamp
+- Redirecionamento 301 para resolucao de URLs curtas
+- Listagem paginada de URLs
+- Suporte a exclusao de URLs
+- Endpoint de verificacao de saude
 
-- Node.js 20+
-- npm or yarn
-
-#### Installation
+### Inicio Rapido
 
 ```bash
-# Clone the repository
 git clone https://github.com/galafis/JavaScript-URL-Shortener.git
 cd JavaScript-URL-Shortener
-
-# Install dependencies
 npm install
-```
-
-#### Running
-
-```bash
-# Development mode
-npm run dev
-
-# Production build
-npm run build
 npm start
 ```
 
-### 📁 Estrutura do Projeto
+### Licenca
 
-```
-JavaScript-URL-Shortener/
-├── LICENSE
-├── README.md
-├── index.js
-└── package.json
-```
+Licenca MIT - veja [LICENSE](LICENSE) para detalhes.
 
-### 🛠️ Stack Tecnológica
-
-| Tecnologia | Descrição | Papel |
-|------------|-----------|-------|
-| **JavaScript** | Core Language | Primary |
-
-### 🤝 Contribuindo
-
-Contribuições são bem-vindas! Sinta-se à vontade para enviar um Pull Request.
-
-### 📄 Licença
-
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
-### 👤 Autor
+### Autor
 
 **Gabriel Demetrios Lafis**
 - GitHub: [@galafis](https://github.com/galafis)
